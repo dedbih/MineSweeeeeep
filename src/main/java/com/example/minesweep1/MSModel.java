@@ -7,6 +7,7 @@ import java.util.Random;
 
 
 
+
 public class MSModel {
     public static int arsenal;
 
@@ -32,6 +33,17 @@ public class MSModel {
             }
         }
     }
+    public static void fire(GridPane grid) {
+        Random rand = new Random();
+        int fil = rand.nextInt(8);
+        int col = rand.nextInt(8);
+        Button button = (Button) grid.getChildren().get(col * 8 + fil);
+        if (button.getProperties().containsKey("pressed")){
+            button.fire();
+            button.fire();
+        }
+        else { button.fire();}
+    }
 
 
     public static int getNumBombs(GridPane grid, int x, int y) {
@@ -51,7 +63,7 @@ public class MSModel {
     }
     public static void setBomb(GridPane grid) {
         Random random = new Random();
-    //    int arsenal = 8;
+        //    int arsenal = 8;
         while (arsenal > 0) {
             int x = random.nextInt(8);
             int y = random.nextInt(8);
@@ -63,4 +75,3 @@ public class MSModel {
         }
     }
 }
-

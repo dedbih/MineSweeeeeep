@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -14,7 +15,6 @@ import javafx.stage.Stage;
 
 public class MSView {
     public GridPane grid1;
-    public GridPane grid2;
 
     public MSView() {
     }
@@ -30,10 +30,10 @@ public class MSView {
             int numBombs = Integer.parseInt(textField.getText());
             MSModel.setNumBombs(numBombs);
             this.grid1 = this.createGrid();
-            this.grid2 = this.createGrid();
+//            this.grid2 = this.createGrid();
             MSModel.setBomb(this.grid1);
-            MSModel.setBomb(this.grid2);
-            VBox container = new VBox(this.grid1, this.grid2);
+//            MSModel.setBomb(this.grid2);
+            VBox container = new VBox(this.grid1); //this.grid2);
             container.setSpacing(10.0);
             container.setStyle("-fx-background-color: #FFFF6D");
             Label label1 = new Label("Label 1");
@@ -76,26 +76,36 @@ public class MSView {
                 final int finalI = i;
                 final int finalJ = j;
                 button.setOnAction((event) -> {
-                    if (button.getProperties().containsKey("bomb")) {
-                        button.setText("B");
-                        button.setStyle("-fx-background-color: #F84156; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
-                        MSModel.reveal(grid, finalI, finalJ);
-                    } else {
-                        int numBombsAround = MSModel.getNumBombs(grid, finalI, finalJ);
-                        if (numBombsAround == 0) {
+                    System.out.println("Button pressed: i = " + finalI + ", j = " + finalJ);
+                    if (!button.getProperties().containsKey("pressed")) {
+                        button.getProperties().put("bomb", true);
+
+                        if (button.getProperties().containsKey("bomb")) {
+                            button.setText("B");
+                            button.setStyle("-fx-background-color: #F84156; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                             MSModel.reveal(grid, finalI, finalJ);
                         } else {
-                            button.setText(String.valueOf(numBombsAround));
+                            int numBombsAround = MSModel.getNumBombs(grid, finalI, finalJ);
+
+                            if (numBombsAround == 0) {
+                                MSModel.reveal(grid, finalI, finalJ);
+                            } else {
+                                button.setText(String.valueOf(numBombsAround));
+                                MSModel.fire(grid1);
+                            }
+
+                            button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                         }
-
-                        button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                     }
-
+                });
+                button.setOnMouseClicked((event) -> {
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                        System.out.println("Jugó");
+                    }
                 });
             }
         }
 
-//        MSModel.fire(this.grid2);
+
         return grid;
-    }
-}
+    }}
