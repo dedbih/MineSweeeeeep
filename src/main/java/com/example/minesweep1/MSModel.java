@@ -1,5 +1,7 @@
 package com.example.minesweep1;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -11,6 +13,17 @@ import java.util.Random;
 
 public class MSModel {
     public static int arsenal;
+    private static BooleanProperty difficult = new SimpleBooleanProperty(false);
+    public static boolean isDifficult() {
+        return difficult.get();
+    }
+    public static void setDifficult(boolean value) {
+        difficult.set(value);
+    }
+
+    public static BooleanProperty difficultProperty() {
+        return difficult;
+    }
 
 
     public static void setNumBombs(int numBombs) {

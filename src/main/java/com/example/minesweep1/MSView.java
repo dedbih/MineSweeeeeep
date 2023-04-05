@@ -1,5 +1,6 @@
 package com.example.minesweep1;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,23 +28,29 @@ public class MSView {
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(10.0);
 
+        Label time = new Label("Time: 0");
+        Label bombs = new Label("Bombs: 0");
+        Label hints = new Label("Hints: 0");
+        Label diff = new Label("Dificil=" + MSModel.isDifficult());
+        Button switchButton = new Button("Switch diff");
+        switchButton.setOnAction((e) -> {
+            MSModel.setDifficult(!MSModel.isDifficult());
+            System.out.println("diff="+MSModel.isDifficult());
+        });
+        diff.textProperty().bind(Bindings.createStringBinding(() -> "Difficult: " + MSModel.isDifficult(), MSModel.difficultProperty()));
+        HBox labels = new HBox(time,bombs,hints, diff, switchButton);
+        labels.setAlignment(Pos.TOP_RIGHT);
+        labels.setSpacing(10.0);
+
         button.setOnAction((event) -> {
             int numBombs = Integer.parseInt(textField.getText());
             MSModel.setNumBombs(numBombs);
-            this.grid1 = this.createGrid();
-//            this.grid2 = this.createGrid();
-            MSModel.setBomb(this.grid1);
-//            MSModel.setBomb(this.grid2);
-            VBox container = new VBox(this.grid1); //this.grid2);
+            this.grid1 = this.createGrid(); // call createGrid() method to create the grid
+            VBox container = new VBox(this.grid1);
             container.setSpacing(10.0);
             container.setStyle("-fx-background-color: #FFFF6D");
-            Label label1 = new Label("Label 1");
-            Label label2 = new Label("Label 2");
-            HBox labels = new HBox(label1, label2);
-            labels.setAlignment(Pos.CENTER_RIGHT);
             BorderPane root = new BorderPane();
             root.setTop(labels);
-            BorderPane.setAlignment(labels, Pos.TOP_RIGHT);
             root.setCenter(container);
             Scene scene = new Scene(root, 600.0, 600.0);
             scene.setFill(Color.LIGHTBLUE);
