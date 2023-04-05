@@ -1,5 +1,6 @@
 package com.example.minesweep1;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
@@ -37,14 +38,15 @@ public class MSModel {
         Random rand = new Random();
         int fil = rand.nextInt(8);
         int col = rand.nextInt(8);
-        Button button = (Button) grid.getChildren().get(col * 8 + fil);
-        if (button.getProperties().containsKey("pressed")){
-            button.fire();
-            button.fire();
+        for (Node node : grid.getChildren()) {
+            if (node instanceof Button button) {
+                if (!button.getProperties().containsKey("pressed")) {
+                    button.getProperties().put("pressed", true); // Set 'pressed' property to true
+                    button.fire(); // Fire the button event
+                }
+            }
         }
-        else { button.fire();}
     }
-
 
     public static int getNumBombs(GridPane grid, int x, int y) {
         int numBombs = 0;

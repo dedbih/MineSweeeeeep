@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 public class MSView {
     public GridPane grid1;
@@ -60,6 +61,7 @@ public class MSView {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
     private GridPane createGrid() {
         GridPane grid = new GridPane();
 
@@ -78,7 +80,8 @@ public class MSView {
                 button.setOnAction((event) -> {
                     System.out.println("Button pressed: i = " + finalI + ", j = " + finalJ);
                     if (!button.getProperties().containsKey("pressed")) {
-                        button.getProperties().put("bomb", true);
+                        button.getProperties().put("pressed", true);
+                        button.setDisable(true); // disable the button after it has been clicked
 
                         if (button.getProperties().containsKey("bomb")) {
                             button.setText("B");
@@ -91,21 +94,21 @@ public class MSView {
                                 MSModel.reveal(grid, finalI, finalJ);
                             } else {
                                 button.setText(String.valueOf(numBombsAround));
-                                MSModel.fire(grid1);
+                                if (button.getText().isEmpty()) { // check if the button has been revealed
+                                    MSModel.fire(grid1);
+                                } // <--- Added closing bracket here
+                                button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                             }
-
-                            button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                         }
                     }
                 });
-                button.setOnMouseClicked((event) -> {
-                    if (event.getButton() == MouseButton.PRIMARY) {
-                        System.out.println("Jugó");
+
+                button.setOnMouseClicked((MouseEvent event) -> {
+                    if (event.getButton() == MouseButton.SECONDARY) {
+                        button.setText("\uD83D\uDEA9");
                     }
                 });
             }
         }
-
-
         return grid;
     }}
