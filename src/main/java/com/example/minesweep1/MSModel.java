@@ -38,10 +38,12 @@ public class MSModel {
                     if (numBombsAround == 0) {
                         button.setText("0");
                         button.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-font-family: Arial; -fx-font-size: 10;");
+                        button.setDisable(true);
                         reveal(grid, i, j);
                     } else {
                         button.setText(String.valueOf(numBombsAround));
                         button.setStyle("-fx-background-color: #FF6DE8; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
+                        button.setDisable(true);
                     }
                 }
             }

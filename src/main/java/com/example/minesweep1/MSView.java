@@ -45,7 +45,8 @@ public class MSView {
         button.setOnAction((event) -> {
             int numBombs = Integer.parseInt(textField.getText());
             MSModel.setNumBombs(numBombs);
-            this.grid1 = this.createGrid(); // call createGrid() method to create the grid
+            this.grid1 = this.createGrid();
+            MSModel.setBomb(grid1);
             VBox container = new VBox(this.grid1);
             container.setSpacing(10.0);
             container.setStyle("-fx-background-color: #FFFF6D");
@@ -87,8 +88,6 @@ public class MSView {
                 button.setOnAction((event) -> {
                     System.out.println("Button pressed: i = " + finalI + ", j = " + finalJ);
                     if (!button.getProperties().containsKey("pressed")) {
-                        button.getProperties().put("pressed", true);
-                        button.setDisable(true); // disable the button after it has been clicked
 
                         if (button.getProperties().containsKey("bomb")) {
                             button.setText("B");
@@ -101,14 +100,15 @@ public class MSView {
                                 MSModel.reveal(grid, finalI, finalJ);
                             } else {
                                 button.setText(String.valueOf(numBombsAround));
-                                if (button.getText().isEmpty()) { // check if the button has been revealed
+                                if (button.getText().isEmpty()) {
                                     MSModel.fire(grid1);
-                                } // <--- Added closing bracket here
+                                }
                                 button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                             }
                         }
                     }
-                });
+                    button.getProperties().put("pressed", true);
+                    button.setDisable(true);});
 
                 button.setOnMouseClicked((MouseEvent event) -> {
                     if (event.getButton() == MouseButton.SECONDARY) {
