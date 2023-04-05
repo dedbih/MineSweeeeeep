@@ -43,6 +43,8 @@ public class MSModel {
                 if (!button.getProperties().containsKey("pressed")) {
                     button.getProperties().put("pressed", true); // Set 'pressed' property to true
                     button.fire(); // Fire the button event
+                }else{
+                    button.fire();
                 }
             }
         }
