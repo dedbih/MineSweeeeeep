@@ -1,5 +1,7 @@
 package com.example.minesweep1;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,12 +16,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 public class MSView {
     public GridPane grid1;
 
-    public MSView() {
-    }
+    private Timeline timeline;
+    private Label timeLabel;
+    private int currentTime = 0;
+
 
     public void start(Stage primaryStage) {
         TextField textField = new TextField();
@@ -28,17 +33,17 @@ public class MSView {
         controls.setAlignment(Pos.CENTER);
         controls.setSpacing(10.0);
 
-        Label time = new Label("Time: 0");
+        timeLabel = new Label("Time: 00:00");
         Label bombs = new Label("Bombs: 0");
         Label hints = new Label("Hints: 0");
         Label diff = new Label("Dificil=" + MSModel.isDifficult());
         Button switchButton = new Button("Switch diff");
         switchButton.setOnAction((e) -> {
             MSModel.setDifficult(!MSModel.isDifficult());
-            System.out.println("diff="+MSModel.isDifficult());
+            System.out.println("diff=" + MSModel.isDifficult());
         });
         diff.textProperty().bind(Bindings.createStringBinding(() -> "Difficult: " + MSModel.isDifficult(), MSModel.difficultProperty()));
-        HBox labels = new HBox(time,bombs,hints, diff, switchButton);
+        HBox labels = new HBox(timeLabel, bombs, hints, diff, switchButton);
         labels.setAlignment(Pos.TOP_RIGHT);
         labels.setSpacing(10.0);
 
@@ -58,6 +63,13 @@ public class MSView {
             primaryStage.setTitle("Minesweep!! щ(`Д´щ;)");
             primaryStage.setScene(scene);
             primaryStage.show();
+
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                currentTime++;
+                timeLabel.setText("Time: " + String.format("%02d:%02d", currentTime / 60, currentTime % 60));
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
         });
 
         VBox vBox = new VBox(controls);
@@ -70,6 +82,8 @@ public class MSView {
         primaryStage.show();
     }
 
+
+
     private GridPane createGrid() {
         GridPane grid = new GridPane();
 
@@ -79,6 +93,7 @@ public class MSView {
                 button.setPrefSize(50.0, 50.0);
                 button.setStyle("-fx-background-color: #B7F54B ; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
                 grid.add(button, i, j);
+                button.getProperties().put("revealed", false);
                 int numBombs = MSModel.getNumBombs(grid, i, j);
                 if (numBombs > 0) {
                     button.setText(String.valueOf(numBombs));
@@ -103,12 +118,17 @@ public class MSView {
                                 if (button.getText().isEmpty()) {
                                     MSModel.fire(grid1);
                                 }
-                                button.setStyle("-fx-background-color: #88CCEE; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
+                                if (numBombsAround<0){
+                                    button.setStyle("-fx-base: #FF6DE8; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
+                                }
                             }
                         }
                     }
+
+                    button.getProperties().put("revealed", true);
                     button.getProperties().put("pressed", true);
-                    button.setDisable(true);});
+                    button.setDisable(true);
+                });
 
                 button.setOnMouseClicked((MouseEvent event) -> {
                     if (event.getButton() == MouseButton.SECONDARY) {
@@ -118,4 +138,5 @@ public class MSView {
             }
         }
         return grid;
-    }}
+    }
+}

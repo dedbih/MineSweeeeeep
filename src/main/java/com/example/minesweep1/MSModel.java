@@ -51,18 +51,26 @@ public class MSModel {
     }
     public static void fire(GridPane grid) {
         Random rand = new Random();
-        int fil = rand.nextInt(8);
-        int col = rand.nextInt(8);
-        for (Node node : grid.getChildren()) {
-            if (node instanceof Button button) {
-                if (!button.getProperties().containsKey("pressed")) {
-                    button.getProperties().put("pressed", true); // Set 'pressed' property to true
-                    button.fire(); // Fire the button event
-                }else{
-                    button.fire();
-                }
+        int i = rand.nextInt(8);
+        int j = rand.nextInt(8);
+        Node node = getNodeFromGridPane(grid, i, j);
+        Button button = (Button) node;
+        if (!((Boolean) button.getProperties().get("revealed"))) {
+            System.out.println("Firing button: i = " + i + ", j = " + j);
+            button.fire();
+        } else {
+            fire(grid);
+        }
+    }
+
+
+    public static Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
             }
         }
+        return null;
     }
 
     public static int getNumBombs(GridPane grid, int x, int y) {
