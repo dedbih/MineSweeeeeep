@@ -17,6 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+
+import java.util.Objects;
 
 public class MSView {
     public GridPane grid1;
@@ -25,6 +30,11 @@ public class MSView {
     private Label timeLabel;
     private int currentTime = 0;
 
+    Image kero = new Image("file:C:\\Users\\lasle\\Downloads\\IntelijCosas\\MineSweep1\\src\\main\\resources\\com\\example\\minesweep1\\kerow.png");
+    ImageView kerobg = new ImageView(kero);
+
+    Image keroic = new Image("file:C:\\Users\\lasle\\Downloads\\IntelijCosas\\MineSweep1\\src\\main\\resources\\com\\example\\minesweep1\\keroicon.jpg");
+    ImageView keroicon = new ImageView(keroic);
 
     public void start(Stage primaryStage) {
         TextField textField = new TextField();
@@ -52,16 +62,26 @@ public class MSView {
             MSModel.setNumBombs(numBombs);
             this.grid1 = this.createGrid();
             MSModel.setBomb(grid1);
-            VBox container = new VBox(this.grid1);
+
+            kerobg.setFitWidth(750);
+            kerobg.setFitHeight(720);
+
+            AnchorPane pane = new AnchorPane();
+            pane.getChildren().addAll(kerobg, this.grid1);
+            AnchorPane.setTopAnchor(this.grid1, 0.0);
+            AnchorPane.setLeftAnchor(this.grid1, 0.0);
+
+
+            VBox container = new VBox(pane);
             container.setSpacing(10.0);
-            container.setStyle("-fx-background-color: #FFFF6D");
+//            container.setStyle("-fx-background-color: #FFFF6D");
             BorderPane root = new BorderPane();
             root.setTop(labels);
             root.setCenter(container);
-            Scene scene = new Scene(root, 600.0, 600.0);
-            scene.setFill(Color.LIGHTBLUE);
+            Scene scene = new Scene(root, 747, 712); //600,600
             primaryStage.setTitle("Minesweep!! щ(`Д´щ;)");
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
             primaryStage.show();
 
             timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
@@ -77,11 +97,10 @@ public class MSView {
         BorderPane root = new BorderPane();
         root.setCenter(vBox);
         Scene scene = new Scene(root, 600.0, 600.0);
-        primaryStage.setTitle("Set Bombs");
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(keroic);
         primaryStage.show();
     }
-
 
 
     private GridPane createGrid() {
@@ -106,7 +125,7 @@ public class MSView {
 
                         if (button.getProperties().containsKey("bomb")) {
                             button.setText("B");
-                            button.setStyle("-fx-background-color: #F84156; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
+                            button.setStyle("-fx-background-color: #F84156; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10; -fx-opacity: 1.0;");
                             MSModel.reveal(grid, finalI, finalJ);
                         } else {
                             int numBombsAround = MSModel.getNumBombs(grid, finalI, finalJ);
@@ -118,8 +137,11 @@ public class MSView {
                                 if (button.getText().isEmpty()) {
                                     MSModel.fire(grid1);
                                 }
-                                if (numBombsAround<0){
-                                    button.setStyle("-fx-base: #FF6DE8; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10;");
+                                if (numBombsAround>2){
+                                    button.setStyle("-fx-background-color: #f4acb9; -fx-background-radius: 0; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10; -fx-opacity: 1.0;");
+                                }
+                                if (numBombsAround==1){
+                                    button.setStyle("-fx-background-color: #e2fbb7; -fx-background-radius: 0; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10; -fx-opacity: 1.0;");
                                 }
                             }
                         }
@@ -138,5 +160,5 @@ public class MSView {
             }
         }
         return grid;
-    }
+}
 }
