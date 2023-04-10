@@ -71,7 +71,6 @@ public class MSView {
             AnchorPane.setTopAnchor(this.grid1, 0.0);
             AnchorPane.setLeftAnchor(this.grid1, 0.0);
 
-
             VBox container = new VBox(pane);
             container.setSpacing(10.0);
 //            container.setStyle("-fx-background-color: #FFFF6D");
