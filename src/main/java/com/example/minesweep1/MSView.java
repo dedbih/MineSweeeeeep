@@ -24,7 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import java.util.Objects;
 
 public class MSView {
-    public GridPane grid1;
+    public static GridPane grid1;
 
     private Timeline timeline;
     private Label timeLabel;
@@ -142,7 +142,7 @@ public class MSView {
                                 if (numBombsAround==1){
                                     button.setStyle("-fx-background-color: #e2fbb7; -fx-background-radius: 0; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10; -fx-opacity: 1.0;");
                                 }
-                            }
+                                MSModel.fire(grid1);}
                         }
                     }
 

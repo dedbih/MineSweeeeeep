@@ -1,19 +1,19 @@
 package com.example.minesweep1;
 
-public class LinkedList {
-    private Node head;
+public class LinkedList<T> {
+    private Node<T> head;
 
     public LinkedList() {
         this.head = null;
     }
 
-    public void addNode(int data) {
-        Node newNode = new Node(data);
+    public void addNode(T data) {
+        Node<T> newNode = new Node<>(data);
 
         if (head == null) {
             head = newNode;
         } else {
-            Node currNode = head;
+            Node<T> currNode = head;
 
             while (currNode.getNext() != null) {
                 currNode = currNode.getNext();
@@ -23,19 +23,19 @@ public class LinkedList {
         }
     }
 
-    public void removeNode(int data) {
+    public void removeNode(T data) {
         if (head == null) {
             return;
         }
 
-        if (head.getData() == data) {
+        if (head.getData().equals(data)) {
             head = head.getNext();
         } else {
-            Node prevNode = head;
-            Node currNode = head.getNext();
+            Node<T> prevNode = head;
+            Node<T> currNode = head.getNext();
 
             while (currNode != null) {
-                if (currNode.getData() == data) {
+                if (currNode.getData().equals(data)) {
                     prevNode.setNext(currNode.getNext());
                     break;
                 }
@@ -45,13 +45,17 @@ public class LinkedList {
             }
         }
     }
+    public void clearList() {
+        head = null;
+    }
+
 
     public void traverseList() {
         if (head == null) {
             return;
         }
 
-        Node currNode = head;
+        Node<T> currNode = head;
 
         while (currNode != null) {
             System.out.print(currNode.getData() + " ");

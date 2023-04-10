@@ -25,6 +25,9 @@ public class MSModel {
         return difficult;
     }
 
+    private static LinkedList <Button> listagen;
+    private static LinkedList <Button> listasafe;
+    private static LinkedList <Button> listaidk;
 
     public static void setNumBombs(int numBombs) {
         arsenal=numBombs;}
@@ -51,17 +54,24 @@ public class MSModel {
     }
     public static void fire(GridPane grid) {
         Random rand = new Random();
-        int i = rand.nextInt(8);
-        int j = rand.nextInt(8);
-        Node node = getNodeFromGridPane(grid, i, j);
-        Button button = (Button) node;
-        if (!((Boolean) button.getProperties().get("revealed"))) {
-            System.out.println("Firing button: i = " + i + ", j = " + j);
-            button.fire();
-        } else {
-            fire(grid);
+        if (!difficult.get()) {
+            int i = rand.nextInt(8);
+            int j = rand.nextInt(8);
+            Node node = getNodeFromGridPane(grid, i, j);
+            Button button = (Button) node;
+            assert button != null;
+            if (!((Boolean) button.getProperties().get("revealed"))) {
+                System.out.println("Firing button: i = " + i + ", j = " + j);
+                button.fire();
+            } else {
+                fire(grid);
+            }
+        } else if (difficult.get()) {
+            listamakergen();
+            showList();
         }
     }
+
 
 
     public static Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
@@ -101,4 +111,26 @@ public class MSModel {
             }
         }
     }
+    private static void listamakergen() {
+        if (listagen != null) {
+            listagen.clearList();
+        }
+        for (Node node : MSView.grid1.getChildren()) {
+            if (node instanceof Button button) {
+                boolean revealed = (boolean) button.getProperties().get("revealed");
+                boolean pressed = (boolean) button.getProperties().getOrDefault("pressed", false);
+
+                if (!revealed && !pressed) {
+                    listagen.addNode(button);
+                }
+            }
+        }
+    }
+
+    public static void showList(){
+        listagen.traverseList();
+        //listasafe.traverseList();
+        //listaidk.traverseList();
+    }
+
 }
