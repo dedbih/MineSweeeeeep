@@ -60,16 +60,16 @@ public class MSView {
         button.setOnAction((event) -> {
             int numBombs = Integer.parseInt(textField.getText());
             MSModel.setNumBombs(numBombs);
-            this.grid1 = this.createGrid();
+            grid1 = this.createGrid();
             MSModel.setBomb(grid1);
 
             kerobg.setFitWidth(750);
             kerobg.setFitHeight(720);
 
             AnchorPane pane = new AnchorPane();
-            pane.getChildren().addAll(kerobg, this.grid1);
-            AnchorPane.setTopAnchor(this.grid1, 0.0);
-            AnchorPane.setLeftAnchor(this.grid1, 0.0);
+            pane.getChildren().addAll(kerobg, grid1);
+            AnchorPane.setTopAnchor(grid1, 0.0);
+            AnchorPane.setLeftAnchor(grid1, 0.0);
 
             VBox container = new VBox(pane);
             container.setSpacing(10.0);
@@ -149,6 +149,8 @@ public class MSView {
                     button.getProperties().put("revealed", true);
                     button.getProperties().put("pressed", true);
                     button.setDisable(true);
+                    MSModel.listamakergen();
+                    MSModel.showList();
                 });
 
                 button.setOnMouseClicked((MouseEvent event) -> {

@@ -62,4 +62,34 @@ public class LinkedList<T> {
             currNode = currNode.getNext();
         }
     }
+    public int getSize() {
+        int size = 0;
+        Node<T> currNode = head;
+        while (currNode != null) {
+            size++;
+            currNode = currNode.getNext();
+        }
+        return size;
+    }
+
+    public T get(int index) {
+        if (head == null) {
+            return null;
+        }
+
+        int currentIndex = 0;
+        Node<T> currNode = head;
+
+        while (currNode != null) {
+            if (currentIndex == index) {
+                return currNode.getData();
+            }
+
+            currNode = currNode.getNext();
+            currentIndex++;
+        }
+
+        return null;
+    }
+
 }

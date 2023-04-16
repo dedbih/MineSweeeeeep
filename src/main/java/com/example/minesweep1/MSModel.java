@@ -25,15 +25,15 @@ public class MSModel {
         return difficult;
     }
 
-    private static LinkedList <Button> listagen;
-    private static LinkedList <Button> listasafe;
-    private static LinkedList <Button> listaidk;
+    public static LinkedList <Button> listagen = new LinkedList<>();
+    public static LinkedList <Button> listasafe;
+    public static LinkedList <Button> listaidk;
 
     public static void setNumBombs(int numBombs) {
         arsenal=numBombs;}
 
     public static void reveal(GridPane grid, int x, int y) {
-        for (int i = Math.max(0, x - 1); i <= Math.min(7, x + 1); i++) { //Busca que x no se salga del índice de la matriz, si x<0, 0. si x>7, 7.
+        for (int i = Math.max(0, x - 1); i <= Math.min(7, x + 1); i++) {
             for (int j = Math.max(0, y - 1); j <= Math.min(7, y + 1); j++) {
                 Button button = (Button) grid.getChildren().get(j * 8 + i);
                 if (button.getText().isEmpty()) {
@@ -55,21 +55,20 @@ public class MSModel {
     public static void fire(GridPane grid) {
         Random rand = new Random();
         if (!difficult.get()) {
-            int i = rand.nextInt(8);
-            int j = rand.nextInt(8);
-            Node node = getNodeFromGridPane(grid, i, j);
-            Button button = (Button) node;
-            assert button != null;
-            if (!((Boolean) button.getProperties().get("revealed"))) {
-                System.out.println("Firing button: i = " + i + ", j = " + j);
-                button.fire();
-            } else {
-                fire(grid);
-            }
-        } else if (difficult.get()) {
+            int r = rand.nextInt(listagen.getSize());
+            Button rButton = listagen.get(r);
+            int i = GridPane.getRowIndex(rButton);
+            int j = GridPane.getColumnIndex(rButton);
+            System.out.println("Firing: " + i + ","+ j);
+            rButton.fire();
+            listagen.removeNode(rButton);
+            listamakergen();
+
+            }else if (difficult.get()) {
             listamakergen();
             showList();
-        }
+
+            }
     }
 
 
@@ -111,7 +110,7 @@ public class MSModel {
             }
         }
     }
-    private static void listamakergen() {
+    public static void listamakergen() {
         if (listagen != null) {
             listagen.clearList();
         }
@@ -129,8 +128,6 @@ public class MSModel {
 
     public static void showList(){
         listagen.traverseList();
-        //listasafe.traverseList();
-        //listaidk.traverseList();
     }
 
 }
