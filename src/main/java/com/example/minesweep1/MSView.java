@@ -28,13 +28,17 @@ public class MSView {
 
     private Timeline timeline;
     private Label timeLabel;
+    private Label hints;
     private int currentTime = 0;
+    private int buttonPressCount = 0;
+    public int pistasdisp = 0;
 
     Image kero = new Image("file:C:\\Users\\lasle\\Downloads\\IntelijCosas\\MineSweep1\\src\\main\\resources\\com\\example\\minesweep1\\kerow.png");
     ImageView kerobg = new ImageView(kero);
 
     Image keroic = new Image("file:C:\\Users\\lasle\\Downloads\\IntelijCosas\\MineSweep1\\src\\main\\resources\\com\\example\\minesweep1\\keroicon.jpg");
     ImageView keroicon = new ImageView(keroic);
+
 
     public void start(Stage primaryStage) {
         TextField textField = new TextField();
@@ -45,8 +49,9 @@ public class MSView {
 
         timeLabel = new Label("Time: 00:00");
         Label bombs = new Label("Bombs: 0");
-        Label hints = new Label("Hints: 0");
+        hints = new Label("Hints: " + pistasdisp );
         Label diff = new Label("Dificil=" + MSModel.isDifficult());
+
         Button switchButton = new Button("Switch diff");
         switchButton.setOnAction((e) -> {
             MSModel.setDifficult(!MSModel.isDifficult());
@@ -146,6 +151,11 @@ public class MSView {
                         }
                     }
 
+                    buttonPressCount++;
+                    if (buttonPressCount % 5 == 0) {
+                        pistasdisp++;
+                        hints.setText("Hints: " + pistasdisp);
+                    }
                     button.getProperties().put("revealed", true);
                     button.getProperties().put("pressed", true);
                     button.setDisable(true);

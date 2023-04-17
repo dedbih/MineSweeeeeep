@@ -26,8 +26,8 @@ public class MSModel {
     }
 
     public static LinkedList <Button> listagen = new LinkedList<>();
-    public static LinkedList <Button> listasafe;
-    public static LinkedList <Button> listaidk;
+    public static LinkedList <Button> listasafe = new LinkedList<>();
+    public static LinkedList <Button> listaidk = new LinkedList<>();
 
     public static void setNumBombs(int numBombs) {
         arsenal=numBombs;}
@@ -55,32 +55,36 @@ public class MSModel {
     public static void fire(GridPane grid) {
         Random rand = new Random();
         if (!difficult.get()) {
-            int r = rand.nextInt(listagen.getSize());
+            int size = listagen.getSize();
+            int r = (size > 0) ? rand.nextInt(size) : 0;
             Button rButton = listagen.get(r);
             int i = GridPane.getRowIndex(rButton);
             int j = GridPane.getColumnIndex(rButton);
             System.out.println("Firing: " + i + ","+ j);
-            rButton.fire();
-            listagen.removeNode(rButton);
+            if (!rButton.isPressed() && !rButton.isDisabled() && rButton.getOpacity() == 1) {
+                rButton.fire();
+                listagen.removeNode(rButton);
+            }
             listamakergen();
-
-            }else if (difficult.get()) {
+        } else if (difficult.get()) {
             listamakergen();
+            safelistgen();
             showList();
-
+            int size = listasafe.getSize();
+            int rr = (size > 0) ? rand.nextInt(size) : 0;
+            Button rrButton = listagen.get(rr);
+            int ii = GridPane.getRowIndex(rrButton);
+            int jj = GridPane.getColumnIndex(rrButton);
+            System.out.println("Firing: " + ii + ","+ jj);
+            if (!rrButton.isPressed() && !rrButton.isDisabled() && rrButton.getOpacity() == 1) {
+                rrButton.fire();
+                listagen.removeNode(rrButton);
             }
-    }
-
-
-
-    public static Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
+            listamakergen();
         }
-        return null;
     }
+
+
 
     public static int getNumBombs(GridPane grid, int x, int y) {
         int numBombs = 0;
@@ -125,9 +129,41 @@ public class MSModel {
             }
         }
     }
+    public static void safelistgen() {
+        if (listasafe != null) {
+            listasafe.clearList();
+        }
+
+        for (Node node : MSView.grid1.getChildren()) {
+            if (node instanceof Button button) {
+                boolean revealed = (boolean) button.getProperties().get("revealed");
+                boolean pressed = (boolean) button.getProperties().getOrDefault("pressed", false);
+
+                if (!revealed && !pressed) {
+                    int row = GridPane.getRowIndex(button);
+                    int col = GridPane.getColumnIndex(button);
+                    for (int i = row - 1; i <= row + 1; i++) {
+                        for (int j = col - 1; j <= col + 1; j++) {
+                            if (i >= 0 && i < 8 && j >= 0 && j < 8 && (i != row || j != col)) {
+                                Button neighbor = (Button) MSView.grid1.getChildren().get(i * 8 + j);
+                                String text = neighbor.getText();
+                                if (text.matches("[0-8]")) {
+                                    listasafe.addNode(neighbor);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public static void showList(){
+        System.out.println("Lista general");
         listagen.traverseList();
+        System.out.println("Lista segura");
+        listasafe.traverseList();
     }
 
 }
