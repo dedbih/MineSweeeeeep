@@ -7,8 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
 import java.util.Random;
-
-
+import java.util.Stack;
 
 
 public class MSModel {
@@ -28,6 +27,7 @@ public class MSModel {
     public static LinkedList <Button> listagen = new LinkedList<>();
     public static LinkedList <Button> listasafe = new LinkedList<>();
     public static LinkedList <Button> listaidk = new LinkedList<>();
+    public static Stack<Integer> pistas = new Stack<>();
 
     public static void setNumBombs(int numBombs) {
         arsenal=numBombs;}
@@ -157,13 +157,23 @@ public class MSModel {
             }
         }
     }
+//    public static void safearraygen() {
+//        for (int i = 0; i < 8; ++i) {
+//            for (int j = 0; j < 8; ++j) {
+//                Button b = MSView.grid1[i][j];
+//                if ((!b.isDisabled() && !b.isPressed() && (!b.getProperties().containsKey("pressed")) && (!b.getProperties().containsKey("bomb")))) {
+//                    MSView.safearray.add(String.valueOf(i*8 + j));
+//                }
+//            }
+//        }
+//    }
 
-
-    public static void showList(){
+    public static void showList() {
         System.out.println("Lista general");
         listagen.traverseList();
         System.out.println("Lista segura");
         listasafe.traverseList();
     }
+
 
 }

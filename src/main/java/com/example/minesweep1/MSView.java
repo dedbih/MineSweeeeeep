@@ -21,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MSView {
@@ -32,6 +34,7 @@ public class MSView {
     private int currentTime = 0;
     private int buttonPressCount = 0;
     public int pistasdisp = 0;
+    public static List<String> safearray = new ArrayList<>();
 
     Image kero = new Image("file:C:\\Users\\lasle\\Downloads\\IntelijCosas\\MineSweep1\\src\\main\\resources\\com\\example\\minesweep1\\kerow.png");
     ImageView kerobg = new ImageView(kero);
@@ -154,6 +157,7 @@ public class MSView {
                     buttonPressCount++;
                     if (buttonPressCount % 5 == 0) {
                         pistasdisp++;
+//                        MSModel.pistas.push(Integer.valueOf(safearray.get(0)));
                         hints.setText("Hints: " + pistasdisp);
                     }
                     button.getProperties().put("revealed", true);
