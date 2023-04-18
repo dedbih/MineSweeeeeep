@@ -3,11 +3,14 @@ package com.example.minesweep1;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
 import java.util.Random;
 import java.util.Stack;
+
+import static com.example.minesweep1.MSView.grid1;
 
 
 public class MSModel {
@@ -118,7 +121,7 @@ public class MSModel {
         if (listagen != null) {
             listagen.clearList();
         }
-        for (Node node : MSView.grid1.getChildren()) {
+        for (Node node : grid1.getChildren()) {
             if (node instanceof Button button) {
                 boolean revealed = (boolean) button.getProperties().get("revealed");
                 boolean pressed = (boolean) button.getProperties().getOrDefault("pressed", false);
@@ -134,7 +137,7 @@ public class MSModel {
             listasafe.clearList();
         }
 
-        for (Node node : MSView.grid1.getChildren()) {
+        for (Node node : grid1.getChildren()) {
             if (node instanceof Button button) {
                 boolean revealed = (boolean) button.getProperties().get("revealed");
                 boolean pressed = (boolean) button.getProperties().getOrDefault("pressed", false);
@@ -145,7 +148,7 @@ public class MSModel {
                     for (int i = row - 1; i <= row + 1; i++) {
                         for (int j = col - 1; j <= col + 1; j++) {
                             if (i >= 0 && i < 8 && j >= 0 && j < 8 && (i != row || j != col)) {
-                                Button neighbor = (Button) MSView.grid1.getChildren().get(i * 8 + j);
+                                Button neighbor = (Button) grid1.getChildren().get(i * 8 + j);
                                 String text = neighbor.getText();
                                 if (text.matches("[0-8]")) {
                                     listasafe.addNode(neighbor);
@@ -173,6 +176,19 @@ public class MSModel {
         listagen.traverseList();
         System.out.println("Lista segura");
         listasafe.traverseList();
+    }
+    public static void perder() {
+        for (Node node : grid1.getChildren()) {
+            if (node instanceof Button button) {
+                button.setDisable(true);
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("BOOM");
+        alert.setHeaderText(null);
+        alert.setContentText("GAME OVER!! ヽ(*｀ﾟД´)ﾉ");
+        alert.showAndWait();
     }
 
 
