@@ -131,6 +131,7 @@ public class MSView {
                             button.setText("B");
                             button.setStyle("-fx-background-color: #F84156; -fx-text-fill: white; -fx-font-family: Arial; -fx-font-size: 10; -fx-opacity: 1.0;");
                             MSModel.reveal(grid, finalI, finalJ);
+                            MSModel.perder();
                         } else {
                             int numBombsAround = MSModel.getNumBombs(grid, finalI, finalJ);
 
