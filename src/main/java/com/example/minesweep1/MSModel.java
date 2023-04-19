@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -16,9 +17,11 @@ import static com.example.minesweep1.MSView.grid1;
 public class MSModel {
     public static int arsenal;
     private static BooleanProperty difficult = new SimpleBooleanProperty(false);
+
     public static boolean isDifficult() {
         return difficult.get();
     }
+
     public static void setDifficult(boolean value) {
         difficult.set(value);
     }
@@ -27,13 +30,15 @@ public class MSModel {
         return difficult;
     }
 
-    public static LinkedList <Button> listagen = new LinkedList<>();
-    public static LinkedList <Button> listasafe = new LinkedList<>();
-    public static LinkedList <Button> listaidk = new LinkedList<>();
+    public static LinkedList<Button> listagen = new LinkedList<>();
+    public static LinkedList<Button> listasafe = new LinkedList<>();
+    public static LinkedList<Button> listaidk = new LinkedList<>();
     public static Stack<Integer> pistas = new Stack<>();
+    public static LinkedList<Button> defijosafe = new LinkedList<>();
 
     public static void setNumBombs(int numBombs) {
-        arsenal=numBombs;}
+        arsenal = numBombs;
+    }
 
     public static void reveal(GridPane grid, int x, int y) {
         for (int i = Math.max(0, x - 1); i <= Math.min(7, x + 1); i++) {
@@ -55,6 +60,7 @@ public class MSModel {
             }
         }
     }
+
     public static void fire(GridPane grid) {
         Random rand = new Random();
         if (!difficult.get()) {
@@ -63,7 +69,7 @@ public class MSModel {
             Button rButton = listagen.get(r);
             int i = GridPane.getRowIndex(rButton);
             int j = GridPane.getColumnIndex(rButton);
-            System.out.println("Firing: " + i + ","+ j);
+            System.out.println("Firing: " + i + "," + j);
             if (!rButton.isPressed() && !rButton.isDisabled() && rButton.getOpacity() == 1) {
                 rButton.fire();
                 listagen.removeNode(rButton);
@@ -78,7 +84,7 @@ public class MSModel {
             Button rrButton = listagen.get(rr);
             int ii = GridPane.getRowIndex(rrButton);
             int jj = GridPane.getColumnIndex(rrButton);
-            System.out.println("Firing: " + ii + ","+ jj);
+            System.out.println("Firing: " + ii + "," + jj);
             if (!rrButton.isPressed() && !rrButton.isDisabled() && rrButton.getOpacity() == 1) {
                 rrButton.fire();
                 listagen.removeNode(rrButton);
@@ -86,7 +92,6 @@ public class MSModel {
             listamakergen();
         }
     }
-
 
 
     public static int getNumBombs(GridPane grid, int x, int y) {
@@ -104,6 +109,7 @@ public class MSModel {
         }
         return numBombs;
     }
+
     public static void setBomb(GridPane grid) {
         Random random = new Random();
         //    int arsenal = 8;
@@ -117,6 +123,7 @@ public class MSModel {
             }
         }
     }
+
     public static void listamakergen() {
         if (listagen != null) {
             listagen.clearList();
@@ -132,6 +139,7 @@ public class MSModel {
             }
         }
     }
+
     public static void safelistgen() {
         if (listasafe != null) {
             listasafe.clearList();
@@ -160,16 +168,14 @@ public class MSModel {
             }
         }
     }
-//    public static void safearraygen() {
-//        for (int i = 0; i < 8; ++i) {
-//            for (int j = 0; j < 8; ++j) {
-//                Button b = MSView.grid1[i][j];
-//                if ((!b.isDisabled() && !b.isPressed() && (!b.getProperties().containsKey("pressed")) && (!b.getProperties().containsKey("bomb")))) {
-//                    MSView.safearray.add(String.valueOf(i*8 + j));
-//                }
-//            }
-//        }
-//    }
+    public static void safegen() {
+        for (Node b : grid1.getChildren()) {
+                if ((!b.isDisabled() && !b.isPressed() && (!b.getProperties().containsKey("pressed")) && (!b.getProperties().containsKey("bomb")))) {
+                    defijosafe.addNode((Button) b);
+                }
+            }
+        }
+
 
     public static void showList() {
         System.out.println("Lista general");
@@ -177,6 +183,7 @@ public class MSModel {
         System.out.println("Lista segura");
         listasafe.traverseList();
     }
+
     public static void perder() {
         for (Node node : grid1.getChildren()) {
             if (node instanceof Button button) {
@@ -190,20 +197,6 @@ public class MSModel {
         alert.setContentText("GAME OVER!! ヽ(*｀ﾟД´)ﾉ");
         alert.showAndWait();
     }
-
-
-    public static void perder() {
-        for (Node node : grid1.getChildren()) {
-            if (node instanceof Button button) {
-                button.setDisable(true);
-            }
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("BOOM");
-        alert.setHeaderText(null);
-        alert.setContentText("GAME OVER!! ヽ(*｀ﾟД´)ﾉ");
-        alert.showAndWait();}
 
 
 }
